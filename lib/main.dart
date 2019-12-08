@@ -29,6 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
   var txt2 = TextEditingController();
   var txt3 = TextEditingController();
   var txt4 = TextEditingController();
+
+  List<Widget> input_fields = [];
+
   @override
   void initState() {
     super.initState();
@@ -53,9 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Code validation'),
-      ),
       body: Center(
         child: Column(
           children: <Widget>[
@@ -63,21 +63,28 @@ class _MyHomePageState extends State<MyHomePage> {
               'assets/imgs/img-1.png',
               width: 260.0,
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    width: 20.0,
+            Container(
+              color: Colors.red,
+              height: 80.0,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: FixedExtentScrollPhysics(),
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width / 6,
+                    padding: EdgeInsets.all(8.0),
                     child: TextField(
-                      showCursor: false,
                       controller: txt1,
+                      focusNode: myFocusNode1,
+                      keyboardType: TextInputType.number,
+                      maxLength: 1,
+                      showCursor: false,
                       autofocus: false,
                       autocorrect: false,
                       enableInteractiveSelection: false,
                       textAlign: TextAlign.center,
-                      maxLength: 1,
-                      focusNode: myFocusNode1,
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: '-',
                         border: OutlineInputBorder(),
@@ -97,112 +104,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         FocusScope.of(context).requestFocus(myFocusNode2);
                       },
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: TextField(
-                      showCursor: false,
-                      controller: txt2,
-                      autofocus: false,
-                      autocorrect: false,
-                      enableInteractiveSelection: false,
-                      textAlign: TextAlign.center,
-                      maxLength: 1,
-                      focusNode: myFocusNode2,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: '-',
-                        border: OutlineInputBorder(),
-                        counter: Offstage(),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                        ),
-                      ),
-                      onChanged: (text) {
-                        FocusScope.of(context).requestFocus(myFocusNode3);
-                        myFocusNode2.addListener(() {
-                          if (myFocusNode2.hasFocus && txt2.text.length >= 1) {
-                            txt2.selection = TextSelection.fromPosition(
-                              TextPosition(offset: txt2.text.length - 1),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: TextField(
-                      showCursor: false,
-                      controller: txt3,
-                      autofocus: false,
-                      autocorrect: false,
-                      enableInteractiveSelection: false,
-                      textAlign: TextAlign.center,
-                      maxLength: 1,
-                      focusNode: myFocusNode3,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: '-',
-                        border: OutlineInputBorder(),
-                        counter: Offstage(),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                        ),
-                      ),
-                      onChanged: (text) {
-                        FocusScope.of(context).requestFocus(myFocusNode4);
-                        myFocusNode3.addListener(() {
-                          if (myFocusNode3.hasFocus && txt3.text.length >= 1) {
-                            txt3.selection = TextSelection.fromPosition(
-                              TextPosition(offset: txt3.text.length - 1),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: TextField(
-                      showCursor: false,
-                      controller: txt4,
-                      autofocus: false,
-                      autocorrect: false,
-                      enableInteractiveSelection: false,
-                      textAlign: TextAlign.center,
-                      maxLength: 1,
-                      focusNode: myFocusNode4,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: '-',
-                        border: OutlineInputBorder(),
-                        counter: Offstage(),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                        ),
-                      ),
-                      onChanged: (text) {
-                        myFocusNode4.addListener(() {
-                          if (myFocusNode4.hasFocus && txt4.text.length >= 1) {
-                            txt4.selection = TextSelection.fromPosition(
-                              TextPosition(offset: txt4.text.length - 1),
-                            );
-                          }
-                        });
-                        txt4.text = text;
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),
     );
   }
+
+  Function setUpNextFocusTextField() {}
 }
