@@ -15,41 +15,34 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class InputField {
+  TextEditingController textField;
+  FocusNode myFocusNode;
+
+  InputField({this.textField, this.myFocusNode});
+}
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  FocusNode myFocusNode1;
-  FocusNode myFocusNode2;
-  FocusNode myFocusNode3;
-  FocusNode myFocusNode4;
-  var txt1 = TextEditingController();
-  var txt2 = TextEditingController();
-  var txt3 = TextEditingController();
-  var txt4 = TextEditingController();
-
-  List<Widget> input_fields = [];
+  List<InputField> input_fields = [];
 
   @override
   void initState() {
     super.initState();
-
-    myFocusNode1 = FocusNode();
-    myFocusNode2 = FocusNode();
-    myFocusNode3 = FocusNode();
-    myFocusNode4 = FocusNode();
+    input_fields = [
+      InputField(textField: TextEditingController(), myFocusNode: FocusNode()),
+      InputField(textField: TextEditingController(), myFocusNode: FocusNode()),
+      InputField(textField: TextEditingController(), myFocusNode: FocusNode()),
+    ];
   }
 
   @override
   void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode1.dispose();
-    myFocusNode2.dispose();
-    myFocusNode3.dispose();
-    myFocusNode4.dispose();
-
+    input_fields.forEach((res) => {res.myFocusNode.dispose()});
     super.dispose();
   }
 
@@ -68,16 +61,15 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 80.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                physics: FixedExtentScrollPhysics(),
-                itemCount: 6,
+                itemCount: input_fields.length,
                 itemBuilder: (context, index) {
                   return Container(
                     alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width / 6,
+                    width: MediaQuery.of(context).size.width / input_fields.length,
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
-                      controller: txt1,
-                      focusNode: myFocusNode1,
+                      controller: input_fields[index].textField,
+                      focusNode: input_fields[index].myFocusNode,
                       keyboardType: TextInputType.number,
                       maxLength: 1,
                       showCursor: false,
@@ -94,14 +86,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       onChanged: (text) {
-                        myFocusNode1.addListener(() {
-                          if (myFocusNode1.hasFocus && txt1.text.length >= 1) {
-                            txt1.selection = TextSelection.fromPosition(
-                              TextPosition(offset: txt1.text.length - 1),
+                        input_fields[index].myFocusNode.addListener(() {
+                          if (input_fields[index].myFocusNode.hasFocus &&
+                              input_fields[index].textField.text.length >= 1) {
+                            input_fields[index].textField.selection =
+                                TextSelection.fromPosition(
+                              TextPosition(
+                                  offset: input_fields[index]
+                                          .textField
+                                          .text
+                                          .length -
+                                      1),
                             );
                           }
                         });
-                        FocusScope.of(context).requestFocus(myFocusNode2);
+                        input_fields[index].textField.text = text;
+                        FocusScope.of(context)
+                            .requestFocus(input_fields[index + 1].myFocusNode);
                       },
                     ),
                   );
@@ -114,5 +115,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Function setUpNextFocusTextField() {}
 }
