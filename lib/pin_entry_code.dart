@@ -79,19 +79,26 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onChanged: (text) {
                 input_fields[index].myFocusNode.addListener(() {
-                  if (input_fields[index].myFocusNode.hasFocus &&
-                      input_fields[index].textField.text.length >= 1) {
-                    input_fields[index].textField.selection =
-                        TextSelection.fromPosition(
-                      TextPosition(
-                          offset:
-                              input_fields[index].textField.text.length - 1),
-                    );
-                  }
+                  // if (input_fields[index].myFocusNode.hasFocus) {
+                  input_fields[index].textField.selection =
+                      TextSelection.fromPosition(
+                    TextPosition(
+                        offset: input_fields[index].textField.text.length - 1),
+                  );
+                  // }
                 });
-                input_fields[index].textField.text = text;
-                FocusScope.of(context)
-                    .requestFocus(input_fields[index + 1].myFocusNode);
+                // input_fields[index].textField.text = "";
+                // input_fields[index].textField.text = text;
+                // if (input_fields[index].textField.text.length >= 1) {
+                // input_fields[index].textField.
+
+                // }
+                setState(() {
+                  input_fields[index].textField.text = text;
+                  input_fields[index + 1].myFocusNode.nextFocus();
+                });
+                // FocusScope.of(context)
+                //     .requestFocus(input_fields[index + 1].myFocusNode);
               },
             ),
           );
